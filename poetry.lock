@@ -209,6 +209,14 @@ python-versions = ">=3.6"
 plugins = ["importlib-metadata"]
 
 [[package]]
+name = "pyodide-http"
+version = "0.2.0"
+description = "Patch requests, urllib and urllib3 to make them work in Pyodide"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "pytest"
 version = "7.2.1"
 description = "pytest: simple powerful testing with Python"
@@ -313,7 +321,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "64ad9e5f94b7e9915bf9019188f061eb405966d1608231e29506c635764b8682"
+content-hash = "0224f342c08c5afbe92d1b7531f9f07c9afa678c79b80d5ba63931dbf7a5dd02"
 
 [metadata.files]
 ansicon = []
@@ -338,6 +346,7 @@ pluggy = [
     {file = "pluggy-0.13.1.tar.gz", hash = "sha256:15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0"},
 ]
 pygments = []
+pyodide-http = []
 pytest = []
 python-dateutil = [
     {file = "python-dateutil-2.8.2.tar.gz", hash = "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86"},

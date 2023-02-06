@@ -1,6 +1,7 @@
 from typing import TypedDict
 from .utils import file_ext
 import enum
+from pyodide.http import open_url
 
 class ExportDataType(str, enum.Enum):
     pandas = "pandas"
@@ -35,13 +36,14 @@ def load_export(export: ExportData):
 
 def _load_pandas(export: ExportData):
     import pandas as pd
+    value = open_url(export["value"])
     match file_ext(export["value"]):
         case "csv":
-            return pd.read_csv(export["value"])
+            return pd.read_csv(value)
         case "tsv":
-            return pd.read_csv(export["value"], sep="\t")
+            return pd.read_csv(value, sep="\t")
         case "json":
-            return pd.read_json(export["value"])
+            return pd.read_json(value)
         case _:
             raise ValueError("Unknown pandas file type")
 
