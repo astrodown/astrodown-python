@@ -1,7 +1,8 @@
 from typing import TypedDict
 from .utils import file_ext
 import enum
-from pyodide.http import open_url
+import pyodide_http
+pyodide_http.patch_all()
 
 class ExportDataType(str, enum.Enum):
     pandas = "pandas"
@@ -29,15 +30,15 @@ def load_export(export: ExportData):
 
         case ExportDataType.raw:
             # load raw
-            return _load_raw()
+            return _load_raw(export)
 
         case _:
             raise ValueError("Unknown export type")
 
 def _load_pandas(export: ExportData):
     import pandas as pd
-    value = open_url(export["value"])
-    match file_ext(export["value"]):
+    value = export["value"]
+    match file_ext(value):
         case "csv":
             return pd.read_csv(value)
         case "tsv":
