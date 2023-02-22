@@ -23,6 +23,7 @@ class ExportData(TypedDict):
     type: ExportDataType
     value: str
 
+
 def get_doc(value: any) -> str:
     return value.__doc__ if value.__doc__ else ""
 
@@ -32,7 +33,7 @@ def inspect_function(f: Callable):
     return "\n".join([doc, f"{f.__name__}{str(signature(f))}"]).strip()
 
 
-def asd_load_export(export: ExportData):
+def load_export(export: ExportData):
     match export["type"]:
         case ExportDataType.pandas:
             return _load_pandas(export)
