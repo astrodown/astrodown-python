@@ -1,4 +1,9 @@
-from typing import TypedDict
+"""
+functions used by js
+"""
+
+from inspect import signature
+from typing import Callable, TypedDict
 from .utils import file_ext
 import enum
 import pyodide_http
@@ -18,8 +23,16 @@ class ExportData(TypedDict):
     type: ExportDataType
     value: str
 
+def get_doc(value: any) -> str:
+    return value.__doc__ if value.__doc__ else ""
 
-def load_export(export: ExportData):
+
+def inspect_function(f: Callable):
+    doc = get_doc(f)
+    return "\n".join([doc, f"{f.__name__}{str(signature(f))}"]).strip()
+
+
+def asd_load_export(export: ExportData):
     match export["type"]:
         case ExportDataType.pandas:
             return _load_pandas(export)
