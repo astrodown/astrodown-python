@@ -1,8 +1,8 @@
 import astrodown.js
 
 
-astrodown = astrodown_js.to_py()
-for export in astrodown["exports"]:
+astrodown_js = astrodown_js.to_py()
+for export in astrodown_js["exports"]:
     globals()[export["name"]] = astrodown.js.load_export(export)
 
 # # astrodown_js is passed through javascript using pyodide.globals.set("astrodown_js", value)
