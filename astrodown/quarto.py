@@ -17,20 +17,10 @@ def path_contains_dir(path: Path | str, dir: str):
 def move_quarto_resources_to_public(output_dir: Path | str):
     output_dir = enpath(output_dir)
     resource_dirs = output_dir.glob("**/*_files")
-    dest_base = Path("public")
+    dest_base = Path(os.getcwd(), "public")
     for dir in resource_dirs:
         if path_contains_dir(dir, "libs"):
-            dest_dir = dest_base / "libs"
-            lib_files = (dir / "libs").glob("*")
-            for (
-                dependency
-            ) in (
-                lib_files
-            ):  # [analysis/<analysis-name>/<anlysis-name>_files/libs/jquery-1.11.1]
-                dest = dest_dir / dependency.name  # public/libs/jquery-1.11.1
-                if not dest.is_dir():
-                    shutil.move(dependency, dest)
-            shutil.rmtree(dir)
+            add_html_dep(dir / "libs")
         else:
             parts = dir.parts
             if "content" in parts:
@@ -43,27 +33,43 @@ def move_quarto_resources_to_public(output_dir: Path | str):
             shutil.move(dir, dest)
 
 
-def adjust_resource_links(resource_files: list[str | Path]):
-    for file in resource_files:
-        path = enpath(file)
-        # example path.parts ('src', 'content', 'analysis', 'dynamic-rmd-quarto', 'index.md')
-        parent_dirs = path.parts[:-1]
+def add_html_dep(dir: Path | str):
+    lib_files = dir.glob("*")
+    dest_base = Path(os.getcwd(), "public")
+    dest_dir = dest_base / "libs"
+    # [analysis/<analysis-name>/<anlysis-name>_files/libs/jquery-1.11.1]
+    for dependency in lib_files:
+        dest = dest_dir / dependency.name  # public/libs/jquery-1.11.1
+        if not dest.is_dir():
+            shutil.move(dependency, dest)
+    shutil.rmtree(dir)
+
+
+def adjust_resource_links(file: str | Path):
+    path = enpath(file)
+    # example path.parts
+    # ('src', 'content', 'analysis', 'dynamic-rmd-quarto', 'index.md')
+    parent_dirs = path.parts[:-1]
+    if parent_dirs[-1] == "content":
+        # this is the index.md for home page
+        prefix = ""
+    else:
         dir = parent_dirs[2]  # "data" or "analysis"
-        prefix = os.path.join(
+        prefix = "/" + os.path.join(
             *parent_dirs[parent_dirs.index(dir) :]
         )  # analysis/dynamic-rmd-quarto
-        with path.open(mode="r+") as f:
-            lines_replaced = [process_line(line, prefix) for line in f]
-            f.seek(0)
-            f.writelines(lines_replaced)
-            f.truncate()
+    with path.open(mode="r+") as f:
+        lines_replaced = [process_line(line, prefix) for line in f]
+        f.seek(0)
+        f.writelines(lines_replaced)
+        f.truncate()
 
 
-def process_line(line: str, prefix):
+def process_line(line: str, prefix: str):
     # check for gfm markdown image syntax
     if re.match(r"^!\[.*\]\(.+\)", line):
         line_replaced = re.sub(
-            r"^!\[(.*)\]\((.+)\)", r"![\1](/{prefix}/\2)".format(prefix=prefix), line
+            r"^!\[(.*)\]\((.+)\)", r"![\1]({prefix}/\2)".format(prefix=prefix), line
         )
         return line_replaced
 
@@ -92,13 +98,15 @@ def prefix_resource_link(line, attr, prefix):
                 libs_idx = libs_idx + len("libs")
                 line_replaced = re.sub(
                     r'{attr}="(.*?)"'.format(attr=attr),
-                    r'{attr}="/libs{after}"'.format(attr=attr, after=attr_val[libs_idx:]),
+                    r'{attr}="/libs{after}"'.format(
+                        attr=attr, after=attr_val[libs_idx:]
+                    ),
                     line,
                 )
             else:
                 line_replaced = re.sub(
                     r'{attr}="(.*?)"'.format(attr=attr),
-                    r'{attr}="/{prefix}/\1"'.format(attr=attr, prefix=prefix),
+                    r'{attr}="{prefix}/\1"'.format(attr=attr, prefix=prefix),
                     line,
                 )
 

@@ -1,20 +1,21 @@
 [tool.poetry]
 name = "astrodown"
 version = "0.1.6"
-description = ""
+description = "A framework for creating shareable data science websites"
 authors = ["Qiushi Yan <qiushi.yann@gmail.com>"]
+readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.8"
 pyodide-http = "^0.2.0"
 typer = {extras = ["all"], version = "^0.7.0"}
 PyYAML = "^6.0"
+cookiecutter = "^2.1.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.2"
 bpython = "^0.24"
 pandas = "^1.5.3"
-pytest-pyodide = "^0.50.0"
 
 [tool.ruff]
 line-length = 120
