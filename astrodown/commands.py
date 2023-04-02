@@ -2,6 +2,7 @@ import os
 from typing import Optional
 import typer
 from typer import Typer
+from pathlib import Path
 from astrodown.templates import get_template_path
 from astrodown.cli.check import (
     print_health_table,
@@ -31,7 +32,7 @@ app = Typer(
 
 @app.command()
 def init(
-    path: str = typer.Option(
+    path: Optional[Path] = typer.Option(
         os.getcwd(),
         "--path",
         "-p",
@@ -40,7 +41,7 @@ def init(
         writable=True,
     ),
     name: str = typer.Option(
-        None,
+        "hello-astrodown",
         "--name",
         "-n",
         help="name of the project",
@@ -67,7 +68,7 @@ def init(
 
     Must have Quarto Node.js installed and avaiable in PATH variables, use `astrodown check` for health checks.
     """
-
+    path = path.expanduser().resolve()
     all_required_programs = [*required_programs, package_manager]
     program_availabilities = {
         program: command_path(program) for program in all_required_programs
