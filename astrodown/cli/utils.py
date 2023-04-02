@@ -5,12 +5,13 @@ import typer
 import yaml
 from astrodown.cli.install import PackageManager
 import os
-from pathlib import Path
 
 
 def run_shell(cmd: str, verbose: bool = True, **kwargs):
     if verbose:
-        prompt_success(cmd)
+        prompt_success(
+            " running command: ", "`", colored_text(cmd, color="blue"), "`", sep=""
+        )
     try:
         _completed_process = subprocess.run(cmd, shell=True, check=True, **kwargs)
     except Exception as e:
@@ -28,8 +29,8 @@ def prompt_error(*text: any, bold: bool = True):
     print(colored_text("\[astrodown]:", color="red", bold=bold), *text)
 
 
-def prompt_success(*text: any, bold: bool = True):
-    print(colored_text("\[astrodown]:", color="green", bold=bold), *text)
+def prompt_success(*text: any, bold: bool = True, **print_args):
+    print(colored_text("\[astrodown]:", color="green", bold=bold), *text, **print_args)
 
 
 def config_exists(config_file: str = "_astrodown.yml") -> bool:
