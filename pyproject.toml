@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "astrodown"
-version = "0.1.6"
+version = "0.1.7"
 description = "A framework for creating shareable data science websites"
 authors = ["Qiushi Yan <qiushi.yann@gmail.com>"]
 readme = "README.md"
