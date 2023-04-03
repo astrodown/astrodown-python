@@ -1,5 +1,5 @@
-from pipes import Template
 import subprocess
+from astrodown.constants import default_config
 from rich import print
 import typer
 import yaml
@@ -38,21 +38,26 @@ def config_exists(config_file: str = "_astrodown.yml") -> bool:
 
 
 def get_astrodown_config(config_file: str = "_astrodown.yml", verbose: bool = True):
+    config_file = os.path.join(os.getcwd(), config_file)
     if not config_exists(config_file):
         if verbose:
-            prompt_error(f"config file {config_file} not found")
-        return None
+            prompt_error(f"config file {config_file} not found, using defaults instead")
+        return default_config
 
     with open(config_file, "r") as f:
         try:
-            return yaml.safe_load(f)
+            config = yaml.safe_load(f)
+            for key in default_config.keys():
+                if key not in config:
+                    config[key] = default_config[key]
+            return config
         except Exception as e:
             if verbose:
                 prompt_error(
                     f"""config file {config_file} is not valid: {e}
                     using defaults instead"""
                 )
-            return None
+            return default_config
 
 
 def get_package_manager(

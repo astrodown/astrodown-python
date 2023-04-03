@@ -5,13 +5,13 @@ let homePage = null;
 try {
   const mdFiles = await Astro.glob("./*.md");
   for (let i = 0; i < mdFiles.length; i++) {
-    if (mdFiles[i].file.includes("index.md")) {
-      homePage = await import("./index.md");
+    if (mdFiles[i].file.includes("_index.md")) {
+      homePage = await import("./_index.md");
       break;
     }
   }
 } catch (error) {
-  console.log("no index.md found in src/pages");
+  console.log("no _index.md found in src/pages");
 }
 ---
 

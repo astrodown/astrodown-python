@@ -7,5 +7,3 @@ def file_ext(filename: str) -> str:
 
 def enpath(path: str | Path) -> Path:
     return Path(path) if isinstance(path, str) else path
-
-

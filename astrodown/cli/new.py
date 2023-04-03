@@ -4,13 +4,6 @@ from pathlib import Path
 import typer
 from astrodown.cli.utils import get_astrodown_config, prompt_error, prompt_success
 
-default_new_component_dir = {
-    "analysis_dir": "analysis",
-    "data_dir": "data",
-    "model_dir": "models",
-    "shiny_dir": "shinyapps",
-}
-
 
 class ComponentType(str, enum.Enum):
     analysis = "analysis"
@@ -21,13 +14,6 @@ class ComponentType(str, enum.Enum):
 
 def new_component(component_type: ComponentType, name: str):
     config = get_astrodown_config()
-    if config is None:
-        config = default_new_component_dir
-    else:
-        for key in default_new_component_dir.keys():
-            if key not in config:
-                config[key] = default_new_component_dir[key]
-
     dir = Path(config[component_type.value + "_dir"])
     if not dir.is_dir():
         dir.mkdir()

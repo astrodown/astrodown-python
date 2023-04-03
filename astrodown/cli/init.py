@@ -15,7 +15,7 @@ def create_project(template_path: str, **cookiecutter_args: dict):
     try:
         result_path = cookiecutter(template_path, no_input=True, **cookiecutter_args)
     except Exception as e:
-        prompt_error("Error creating project", e)
+        prompt_error("creating project", e)
         raise typer.Exit()
 
     return result_path

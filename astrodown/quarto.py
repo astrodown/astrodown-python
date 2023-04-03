@@ -5,8 +5,10 @@ from pathlib import Path
 import shutil
 import os
 import re
-
+from rich.console import Console
 from astrodown.utils import enpath
+
+console = Console()
 
 
 def path_contains_dir(path: Path | str, dir: str):
@@ -14,29 +16,42 @@ def path_contains_dir(path: Path | str, dir: str):
     return len(list(path.glob(dir))) > 0
 
 
-def move_quarto_resources_to_public(output_dir: Path | str):
-    output_dir = enpath(output_dir)
-    resource_dirs = output_dir.glob("**/*_files")
-    dest_base = Path(os.getcwd(), "public")
-    for dir in resource_dirs:
-        if path_contains_dir(dir, "libs"):
-            add_html_dep(dir / "libs")
+def move_html_assets(
+    src: Path | str,
+    public_dir: Path | str,
+):
+    src = enpath(src)
+    assets = src.glob("**/*_files")
+
+    for asset in assets:
+        if path_contains_dir(asset, "libs"):
+            add_html_dep(asset / "libs", public_dir)
+
+
+def move_assets(src: Path | str, public_dir: Path | str):
+    src = enpath(src)
+    public_dir = enpath(public_dir)
+
+    assets = src.glob("**/*_files")
+    for asset in assets:
+        parts = asset.parts
+        if "content" in parts:
+            suffix = os.path.join(*parts[parts.index("content") + 1 :])
         else:
-            parts = dir.parts
-            if "content" in parts:
-                suffix = os.path.join(*parts[parts.index("content") + 1 :])
-            else:
-                suffix = dir
-            dest = dest_base / suffix
-            if os.path.isdir(dest):
-                shutil.rmtree(dest)
-            shutil.move(dir, dest)
+            suffix = dir
+        dest = Path(public_dir, suffix)
+        # hack to fix bug in moving assets for index.qmd
+        if "public/public" in str(dest):
+            shutil.rmtree(Path("src/content/public"))
+            return
+        if dest.exists():
+            shutil.rmtree(dest)
+        shutil.move(asset, dest)
 
 
-def add_html_dep(dir: Path | str):
+def add_html_dep(dir: Path | str, public_dir: Path | str):
     lib_files = dir.glob("*")
-    dest_base = Path(os.getcwd(), "public")
-    dest_dir = dest_base / "libs"
+    dest_dir = public_dir / "libs"
     # [analysis/<analysis-name>/<anlysis-name>_files/libs/jquery-1.11.1]
     for dependency in lib_files:
         dest = dest_dir / dependency.name  # public/libs/jquery-1.11.1
@@ -98,9 +113,7 @@ def prefix_resource_link(line, attr, prefix):
                 libs_idx = libs_idx + len("libs")
                 line_replaced = re.sub(
                     r'{attr}="(.*?)"'.format(attr=attr),
-                    r'{attr}="/libs{after}"'.format(
-                        attr=attr, after=attr_val[libs_idx:]
-                    ),
+                    r'{attr}="/libs{after}"'.format(attr=attr, after=attr_val[libs_idx:]),
                     line,
                 )
             else:
