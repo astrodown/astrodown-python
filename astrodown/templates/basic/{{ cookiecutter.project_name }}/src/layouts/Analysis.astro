@@ -3,9 +3,10 @@ import type { CollectionEntry } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
 import SidebarLayout from "./SidebarLayout.astro";
 import Badge from "@components/shared/Badge.astro";
-import { showArray } from "@lib/utils";
+import { objectToBase64j, showArray } from "@lib/utils";
 import Metadata from "@components/analysis/Metadata.astro";
 import type { GraphinData } from "@astrodown/graph";
+import { getCodeFromBody } from "@lib/playground";
 
 export interface Props {
   entry: CollectionEntry<"analysis">;
@@ -13,6 +14,9 @@ export interface Props {
 }
 
 const { entry, graphData } = Astro.props;
+
+const code = await getCodeFromBody(entry.body);
+const codeEncoded = objectToBase64(code);
 
 const { Content, headings } = await entry.render();
 const metadataEntries = [
@@ -66,13 +70,9 @@ const metadataEntries = [
           ))
         }
       </ul>
-      {
-        entry.data.exports.length > 0 && (
-          <a href={`/playground/${entry.slug}`}>
-            <Badge class="bg-blue-200 text-blue-800">Playground</Badge>
-          </a>
-        )
-      }
+      <a href={`https://tridata.qiushiyan.dev/?code=${codeEncoded}`}>
+        <Badge class="bg-blue-200 text-blue-800">Playground</Badge>
+      </a>
     </div>
     <div slot="main">
       <Content />

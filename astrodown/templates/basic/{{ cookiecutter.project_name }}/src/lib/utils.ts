@@ -1,4 +1,6 @@
-import path from "path";
+export const objectToBase64 = (obj: Object) => {
+	return Buffer.from(JSON.stringify(obj)).toString("base64");
+};
 
 export const showError = (error: unknown): string => {
 	return error instanceof Error ? error.message : String(error);
