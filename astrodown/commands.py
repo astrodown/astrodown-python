@@ -1,4 +1,5 @@
 import os
+import subprocess
 from typing import Optional
 import typer
 from typer import Typer
@@ -56,7 +57,7 @@ def init(
         help="package manager to use, default to npm",
     ),
     template: Template = typer.Option(
-        "basic",
+        "full",
         "--template",
         "-t",
         prompt="Template",
@@ -143,15 +144,25 @@ def dev(
     ),
     port: Optional[int] = typer.Option(3000, help="port to run the website"),
     render_quarto: Optional[bool] = typer.Option(
-        False, help="rerender quarto documents first"
+        False, help="render quarto documents first before starting the website"
+    ),
+    reload: Optional[bool] = typer.Option(
+        True,
+        help="reload the website when files change (use `quarto preview` in a separate process)",
     ),
 ):
     """
     [bold blue]Preivew[/bold blue] the website
+
+    if --render-quarto is set, all quarto documents will be rendered before the website is started. Set this if it's the first time you're running the website or you've made changes to the quarto documents.
+
+    if --reload is set, the website preview will be updated when quarto documents change. This is achieved by calling `quarto preview` in a separate process
     """
     if render_quarto:
         prompt_success("rendering quarto documents")
         run_shell("quarto render")
+    if reload:
+        run_shell("quarto preview --no-serve", verbose=False, background=True)
     prompt_success("previewing the website")
     run_shell(f"{package_manager} run dev --port {port}")
 

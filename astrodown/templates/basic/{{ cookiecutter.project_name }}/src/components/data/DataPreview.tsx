@@ -7,7 +7,7 @@ export type Props = {
 };
 
 export default function DataPreview({ config }: Props) {
-	const { data, nrow, ncol, headers, title, description } = config;
+	const { data, nrow, ncol, headers, title, description, previewURL } = config;
 	return (
 		<Modal openText="Preview" className="max-w-3xl">
 			<Modal.Body>
@@ -20,6 +20,9 @@ export default function DataPreview({ config }: Props) {
 								</h2>
 								<p>
 									{nrow} rows, {ncol} columns
+								</p>
+								<p>
+									<a href={previewURL}>{previewURL}</a>
 								</p>
 							</>
 						)}

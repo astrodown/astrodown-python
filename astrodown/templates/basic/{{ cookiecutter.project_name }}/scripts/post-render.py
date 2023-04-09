@@ -36,7 +36,7 @@ if os.getenv("QUARTO_PROJECT_OUTPUT_FILES") is not None:
             dst = Path(os.getcwd(), "src/pages/_index.md")
             if os.path.exists(dst):
                 os.remove(dst)
-            shutil.move(index_md, dst)
+            shutil.copy(index_md, dst)
             html_dir = Path("index_files")
             if html_dir.exists():
                 move_html_assets(html_dir, public_dir)

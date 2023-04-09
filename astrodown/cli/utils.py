@@ -7,13 +7,18 @@ from astrodown.cli.install import PackageManager
 import os
 
 
-def run_shell(cmd: str, verbose: bool = True, **kwargs):
+def run_shell(
+    cmd: str | list[str], verbose: bool = True, background: bool = False, **kwargs
+):
     if verbose:
         prompt_success(
             " running command: ", "`", colored_text(cmd, color="blue"), "`", sep=""
         )
     try:
-        _completed_process = subprocess.run(cmd, shell=True, check=True, **kwargs)
+        if background:
+            subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True, **kwargs)
+        else:
+            _completed_process = subprocess.run(cmd, shell=True, check=True, **kwargs)
     except Exception as e:
         prompt_error(f"command `{cmd}` failed with reason: {e}")
         raise typer.Exit(1)

@@ -2,16 +2,9 @@
 title: "mtcars data"
 description: |
   Irure nisi eu dolore fugiat enim labore id ullamco mollit cillum minim consequat. Enim reprehenderit elit qui ipsum incididunt voluptate eiusmod eu. Mollit aute magna consequat est velit do dolore tempor non. Duis esse consectetur cillum aute aute aliqua labore quis nostrud ad dolor elit.
-id: mtcars
-label: mtcars dataset
+id: mtcars-data
+label: mtcars data
 previewURL: "https://raw.githubusercontent.com/sap0408/mtcars/master/mtcars.csv"
-exports:
-  - name: mtcars
-    type: pandas
-    value: https://raw.githubusercontent.com/sap0408/mtcars/master/mtcars.csv
-relationships:
-  - id: something-else
-    label: "whatever"
 ---
 
 # Introduction

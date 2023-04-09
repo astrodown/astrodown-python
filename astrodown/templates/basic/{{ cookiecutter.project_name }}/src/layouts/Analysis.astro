@@ -14,7 +14,6 @@ export interface Props {
 }
 
 const { entry, graphData } = Astro.props;
-
 const code = await getCodeFromBody(entry.body);
 const codeEncoded = objectToBase64(code);
 

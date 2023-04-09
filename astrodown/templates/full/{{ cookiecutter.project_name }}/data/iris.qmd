@@ -1,6 +1,10 @@
 ---
 title: iris data
-id: iris
+id: iris-data
+label: iris data
+relationships:
+  - id: eda-r
+    label: "created by"
 format:
     hugo:
         toc: false

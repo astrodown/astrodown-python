@@ -25,6 +25,7 @@ const parser = csv({
 
 let dataParseError = null;
 const config: DataPreviewConfig = {
+  previewURL: "",
   data: [],
   headers: [],
   nrow: 0,
@@ -38,6 +39,7 @@ if (entry.data.previewURL) {
     const text = await res.text();
     const completeData = await parser.fromString(text);
     const data = completeData.slice(0, 100);
+    config.previewURL = entry.data.previewURL;
     config.data = data;
     config.headers = Object.keys(data[0]);
     config.nrow = data.length;
@@ -60,13 +62,6 @@ if (entry.data.previewURL) {
             ) : (
               <DataPreview config={config} client:only="load" />
             ))
-        }
-        {
-          entry.data.exports.length > 0 && (
-            <a href={`/playground/${entry.slug}`} class="flex mt-2">
-              <Badge class="bg-blue-200 text-blue-800">Playground</Badge>
-            </a>
-          )
         }
       </div>
       <div slot="main">
