@@ -9,7 +9,7 @@ description: |
 tags: ["EDA"]
 relationships:
   - id: eda-python
-    label: "complements"
+    label: "compliments"
 ---
 
 ## Overview

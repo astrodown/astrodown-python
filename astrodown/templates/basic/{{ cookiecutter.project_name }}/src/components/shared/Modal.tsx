@@ -7,6 +7,7 @@ interface Props {
 	title?: string;
 	children: React.ReactNode;
 	className?: string;
+	network?: boolean;
 }
 
 const Body = ({ children }: { children: React.ReactNode }) => {
@@ -17,16 +18,14 @@ const Modal = ({
 	openText,
 	children,
 	title,
+	network,
 	className = "sm:max-w-3xl",
 }: Props) => {
 	const [showModal, setShowModal] = useState(false);
 	return (
 		<>
 			<button
-				className={clsx("outline-none focus:outline-none mr-1 mb-1", {
-					"border border-blue-600 font-bold p-3 rounded shadow hover:shadow-lg":
-						openText,
-				})}
+				className="btn btn-outline"
 				type="button"
 				onClick={() => setShowModal(true)}
 			>
@@ -62,15 +61,26 @@ const Modal = ({
 										<Dialog.Panel
 											className={clsx(
 												className,
-												"relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 text-left shadow-xl transition-all sm:my-4 sm:w-full sm:p-4",
+												"relative transform overflow-hidden rounded-lg  px-4 pb-4 text-left shadow-xl transition-all sm:my-4 sm:w-full sm:p-4 bg-base-100",
 											)}
 										>
 											<div className="flex items-center">
 												{title && (
-													<h2 className='font-serif font-semibold text-xl'>
+													<h3 className='tracking-tight text-gray-50'>
 														{title}
-													</h2>
+													</h3>
 												)}
+												{network && (
+													<h3 className='tracking-tight text-gray-50 text-sm px-4'>
+														A website network with circles representing{" "}
+														<span className="text-[#a991f7]">analysis </span>
+														and <span className="text-[#3b82f6]">data</span>,
+														connections are defined by the `relationships`
+														frontmatter, focal points are{" "}
+														<span className="text-[#eab308]">highlighted</span>.
+													</h3>
+												)}
+
 												<div className='ml-auto'>
 													<button onClick={() => setShowModal(false)}>
 														<XMarkIcon className='w-6 h-6' />

@@ -10,9 +10,9 @@ interface Props {
 const SlideOver = ({ children }: Props) => {
 	const [open, setOpen] = useState(false);
 
-	return open ?
+	return open ? (
 		<Transition.Root show={open} as={Fragment}>
-			<Dialog as="div" className="relative z-10" onClose={setOpen}>
+			<Dialog as="div" className="relative" onClose={setOpen}>
 				<div className="fixed inset-0" />
 				<div className="fixed inset-0 overflow-hidden">
 					<div className="absolute inset-0 overflow-hidden">
@@ -30,7 +30,9 @@ const SlideOver = ({ children }: Props) => {
 									<div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
 										<div className="px-4 sm:px-6">
 											<div className="flex items-start justify-between">
-												<Dialog.Title className="text-lg font-medium text-gray-900">Data Preview</Dialog.Title>
+												<Dialog.Title className="text-lg font-medium text-gray-900">
+													Data Preview
+												</Dialog.Title>
 												<div className="ml-3 flex h-7 items-center">
 													<button
 														type="button"
@@ -53,10 +55,15 @@ const SlideOver = ({ children }: Props) => {
 					</div>
 				</div>
 			</Dialog>
-		</Transition.Root> :
-		<button onClick={() => setOpen(prev => !prev)} className="rounded-lg p-2 border border-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-100 ">
+		</Transition.Root>
+	) : (
+		<button
+			onClick={() => setOpen((prev) => !prev)}
+			className="rounded-lg p-2 border border-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-100 "
+		>
 			open preview
 		</button>
-}
+	);
+};
 
-export default React.memo(SlideOver)
+export default React.memo(SlideOver);

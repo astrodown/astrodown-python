@@ -15,7 +15,7 @@ export default function DataPreview({ config }: Props) {
 					<div className="sm:flex-auto">
 						{title && (
 							<>
-								<h2 className="text-2xl font-bold leading-6 text-gray-900 font-serif">
+								<h2 className="text-2xl leading-6 text-gray-900 font-semibold">
 									{title}
 								</h2>
 								<p>

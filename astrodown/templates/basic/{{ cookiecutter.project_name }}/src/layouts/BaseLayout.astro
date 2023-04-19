@@ -12,13 +12,13 @@ interface Props {
 
 let { class: className, graphData } = Astro.props;
 if (!className) {
-  className = "max-w-5xl px-8 mx-auto min-h-screen";
+  className = "max-w-5xl px-6 lg:px-8 py-4 lg:pt-8 mx-auto min-h-screen";
 }
 ---
 
 <html lang="en">
   <BaseHead />
-  <body>
+  <body class="font-sans font-light">
     <SiteHeader graphData={graphData} />
     <main class={className}>
       <slot />

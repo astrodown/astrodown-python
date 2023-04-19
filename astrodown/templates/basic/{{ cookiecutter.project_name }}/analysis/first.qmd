@@ -1,5 +1,5 @@
 ---
-title: "First Analysis"
+title: "Analysis with Quarto"
 id: first-analysis
 label: "First Analysis"
 author: ["Jane Doe", "john"]

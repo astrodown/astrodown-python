@@ -4,9 +4,10 @@ project:
     - scripts/post-render.py
   render:
     - analysis/**/*.qmd
+    - analysis/**/*.ipynb
     - data/**/*.qmd
+    - data/**/*.ipynb
     - index.qmd
-
 freeze: auto
 
 format:
