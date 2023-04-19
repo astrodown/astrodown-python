@@ -21,6 +21,8 @@ from astrodown.cli.install import PackageManager
 from rich import print
 from astrodown.cli.new import ComponentType, new_component
 
+__version__ = "0.1.14"
+
 
 app = Typer(
     rich_markup_mode="rich",
@@ -212,8 +214,19 @@ def check():
         )
 
 
+def version_callback(value: bool):
+    if value:
+        print(f"Astrodown: {__version__}")
+        raise typer.Exit()
+
+
 @app.callback(context_settings={"ignore_unknown_options": True})
-def callback(ctx: typer.Context):
+def callback(
+    ctx: typer.Context,
+    version: Optional[bool] = typer.Option(
+        None, "--version", callback=version_callback, is_eager=True
+    ),
+):
     """
     [bold blue]Astrodown[/bold blue] is a toolkit to build interactive websites for data science projects.
 
