@@ -1,9 +1,11 @@
 [tool.poetry]
 name = "astrodown"
-version = "0.1.14"
+version = "0.1.16"
 description = "A framework for creating shareable data science websites"
 authors = ["Qiushi Yan <qiushi.yann@gmail.com>"]
 readme = "README.md"
+include = ["astrodown/templates/full/{{ cookiecutter.project_name }}/**/*"]
+
 
 [tool.poetry.dependencies]
 python = "^3.8"

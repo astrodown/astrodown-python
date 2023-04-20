@@ -21,7 +21,7 @@ from astrodown.cli.install import PackageManager
 from rich import print
 from astrodown.cli.new import ComponentType, new_component
 
-__version__ = "0.1.14"
+__version__ = "0.1.16"
 
 
 app = Typer(
